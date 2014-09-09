@@ -28,49 +28,37 @@
         }
     };
     weather.getWeather = function (lat, lon, callback) {
-        $.ajax({
+        return $.ajax({
             url: apiEndPoints.getWeatherUrl(lat, lon),
             headers: {
                 "X-Mashape-Key": apiEndPoints.getApiKey()
             },
-            success: function (data) {
-                if (data) {
-                    callback({
-                        success: true,
-                        result: data
-                    });
-                }
-                else {
-                    callback({
-                        success: false,
-                        result: null
-                    });
-                }
-            },
+            success: _successCallback,
             type: 'GET'
         });
     }
-    weather.getWeatherData = function(lat, lon, callback) {
-        $.ajax({
+    weather.getWeatherData = function (lat, lon, callback) {
+        return $.ajax({
             url: apiEndPoints.getWeatherDataUrl(lat, lon),
             headers: {
                 "X-Mashape-Key": apiEndPoints.getApiKey()
             },
-            success: function (data) {
-                if (data) {
-                    callback({
-                        success: true,
-                        result: JSON.parse(data)
-                    });
-                }
-                else {
-                    callback({
-                        success: false,
-                        result: null
-                    });
-                }
-            },
+            success: weather._successCallback,
             type: 'GET'
         });
+    }
+    weather._successCallback = function (data) {
+        if (data) {
+            callback({
+                success: true,
+                result: JSON.parse(data)
+            });
+        }
+        else {
+            callback({
+                success: false,
+                result: null
+            });
+        }
     }
 })();
