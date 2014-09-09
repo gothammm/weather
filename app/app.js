@@ -33,19 +33,23 @@ function loadOrRefreshWeatherData() {
         var para = $(".jumbotron #details");
         header.html("Loading..");
         para.html("Loading..")
-        weather.getWeather(lat, lon, function (data) {
+        weather.getWeather(lat, lon).then(function (data) {
             $(".jumbotron .btn").attr("disabled", false);
-            if (data && data.success) {
-                header.html(data.result);
+            if (data) {
+                header.html(data);
             }
+        }, function () {
+            alert("Error!");
         });
-        weather.getWeatherData(lat, lon, function (data) {
+        weather.getWeatherData(lat, lon).then(function (data) {
             $(".jumbotron .btn").attr("disabled", false);
-            if (data && data.success) {
-                var result = data.result.query.results;
+            if (data) {
+                var result = JSON.parse(data).query.results;
                 var channel = result.channel;
                 para.html(channel.item.description);
             }
+        }, function () {
+            alert("Error!");
         });
     });
 }
